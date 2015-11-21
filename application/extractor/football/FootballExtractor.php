@@ -25,7 +25,8 @@ class FootballExtractor
             $gDiff[] = $goalsFor[$i] - $goalsAgainst[$i];
         }
 
-        return trim($team[array_search(min(array_map('abs', $gDiff)), $gDiff)]);
+        $gDiffAbs = array_map('abs', $gDiff);
+        return trim($team[array_search(min($gDiffAbs), $gDiffAbs)]);
     }
 
     private function getColumn($name, $file, $castTo)

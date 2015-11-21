@@ -8,7 +8,26 @@
 namespace application\extractor\football;
 
 
-class FootballExtractorDRY
-{
+use application\extractor\Extractor;
 
+class FootballExtractorDRY extends Extractor
+{
+    public function getMinScoreDiff($file)
+    {
+        $team = $this->getColumn('Team', $file, 'strval');
+        $goalsFor = $this->getColumn('F', $file, 'intval');
+        $goalsAgainst = $this->getColumn('A', $file, 'intval');
+
+        $combined = ['Team' => $team, 'For' => $goalsFor, 'Against' => $goalsAgainst];
+
+        $gDiff = [];
+
+        for($i = 0; $i < count($team); $i++)
+        {
+            $gDiff[] = $goalsFor[$i] - $goalsAgainst[$i];
+        }
+
+        $gDiffAbs = array_map('abs', $gDiff);
+        return trim($team[array_search(min($gDiffAbs), $gDiffAbs)]);
+    }
 } 
